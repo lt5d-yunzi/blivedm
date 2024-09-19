@@ -23,8 +23,8 @@ class DanmakuMessage:
 
     uname: str = ''
     """用户昵称"""
-    open_id: str = ''
-    """用户唯一标识"""
+    uid: int = 0
+    """用户UID"""
     uface: str = ''
     """用户头像"""
     timestamp: int = 0
@@ -52,7 +52,7 @@ class DanmakuMessage:
     def from_command(cls, data: dict):
         return cls(
             uname=data['uname'],
-            open_id=data['open_id'],
+            uid=data['uid'],
             uface=data['uface'],
             timestamp=data['timestamp'],
             room_id=data['room_id'],
@@ -75,8 +75,6 @@ class AnchorInfo:
 
     uid: int = 0
     """收礼主播uid"""
-    open_id: str = ''
-    """收礼主播唯一标识"""
     uname: str = ''
     """收礼主播昵称"""
     uface: str = ''
@@ -86,7 +84,6 @@ class AnchorInfo:
     def from_dict(cls, data: dict):
         return cls(
             uid=data['uid'],
-            open_id=data['open_id'],
             uname=data['uname'],
             uface=data['uface'],
         )
@@ -125,8 +122,8 @@ class GiftMessage:
 
     room_id: int = 0
     """房间号"""
-    open_id: str = ''
-    """用户唯一标识"""
+    uid: int = 0
+    """送礼用户UID"""
     uname: str = ''
     """送礼用户昵称"""
     uface: str = ''
@@ -138,7 +135,7 @@ class GiftMessage:
     gift_num: int = 0
     """赠送道具数量"""
     price: int = 0
-    """礼物爆出单价，(1000 = 1元 = 10电池),盲盒:爆出道具的价值"""
+    """（礼物单价）支付金额(1000 = 1元 = 10电池),盲盒:爆出道具的价值"""  # 这个B  站文档又不写清楚是单价还是总价
     paid: bool = False
     """是否是付费道具"""
     fans_medal_level: int = 0
@@ -172,7 +169,7 @@ class GiftMessage:
 
         return cls(
             room_id=data['room_id'],
-            open_id=data['open_id'],
+            uid=data['uid'],
             uname=data['uname'],
             uface=data['uface'],
             gift_id=data['gift_id'],
@@ -199,8 +196,8 @@ class UserInfo:
     用户信息
     """
 
-    open_id: str = ''
-    """用户唯一标识"""
+    uid: int = 0
+    """用户uid"""
     uname: str = ''
     """用户昵称"""
     uface: str = ''
@@ -209,7 +206,7 @@ class UserInfo:
     @classmethod
     def from_dict(cls, data: dict):
         return cls(
-            open_id=data['open_id'],
+            uid=data['uid'],
             uname=data['uname'],
             uface=data['uface'],
         )
@@ -229,8 +226,6 @@ class GuardBuyMessage:
     """大航海数量"""
     guard_unit: str = ''
     """大航海单位"""
-    price: int = 0
-    """大航海金瓜子"""
     fans_medal_level: int = 0
     """粉丝勋章等级"""
     fans_medal_name: str = ''
@@ -251,7 +246,6 @@ class GuardBuyMessage:
             guard_level=data['guard_level'],
             guard_num=data['guard_num'],
             guard_unit=data['guard_unit'],
-            price=data['price'],
             fans_medal_level=data['fans_medal_level'],
             fans_medal_name=data['fans_medal_name'],
             fans_medal_wearing_status=data['fans_medal_wearing_status'],
@@ -269,8 +263,8 @@ class SuperChatMessage:
 
     room_id: int = 0
     """直播间id"""
-    open_id: str = ''
-    """用户唯一标识"""
+    uid: int = 0
+    """购买用户UID"""
     uname: str = ''
     """购买的用户昵称"""
     uface: str = ''
@@ -302,7 +296,7 @@ class SuperChatMessage:
     def from_command(cls, data: dict):
         return cls(
             room_id=data['room_id'],
-            open_id=data['open_id'],
+            uid=data['uid'],
             uname=data['uname'],
             uface=data['uface'],
             message_id=data['message_id'],
@@ -351,18 +345,16 @@ class LikeMessage:
 
     uname: str = ''
     """用户昵称"""
-    open_id: str = ''
-    """用户唯一标识"""
+    uid: int = 0
+    """用户UID"""
     uface: str = ''
     """用户头像"""
-    timestamp: int = 0
-    """时间秒级时间戳"""
+    # timestamp: int = 0  # 官方文档里有这个字段，实际上没有
+    # """时间秒级时间戳"""
     room_id: int = 0
     """发生的直播间"""
     like_text: str = ''
     """点赞文案(“xxx点赞了”)"""
-    like_count: int = 0
-    """对单个用户最近2秒的点赞次数聚合"""
     fans_medal_wearing_status: bool = False
     """该房间粉丝勋章佩戴情况"""
     fans_medal_name: str = ''
@@ -371,18 +363,16 @@ class LikeMessage:
     """对应房间勋章信息"""
     msg_id: str = ''  # 官方文档表格里没列出这个字段，但是参考JSON里面有
     """消息唯一id"""
-    # 还有个guard_level，但官方文档没有出现这个字段，就不添加了
 
     @classmethod
     def from_command(cls, data: dict):
         return cls(
             uname=data['uname'],
-            open_id=data['open_id'],
+            uid=data['uid'],
             uface=data['uface'],
-            timestamp=data['timestamp'],
+            # timestamp=data['timestamp'],  # 官方文档里有这个字段，实际上没有
             room_id=data['room_id'],
             like_text=data['like_text'],
-            like_count=data['like_count'],
             fans_medal_wearing_status=data['fans_medal_wearing_status'],
             fans_medal_name=data['fans_medal_name'],
             fans_medal_level=data['fans_medal_level'],

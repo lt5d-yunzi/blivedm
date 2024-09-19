@@ -15,8 +15,9 @@ __all__ = (
 
 logger = logging.getLogger('blivedm')
 
+HEADERS_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36'
 UID_INIT_URL = 'https://api.bilibili.com/x/web-interface/nav'
-BUVID_INIT_URL = 'https://www.bilibili.com/'
+BUVID_INIT_URL = 'https://data.bilibili.com/v/'
 ROOM_INIT_URL = 'https://api.live.bilibili.com/xlive/web-room/v1/index/getInfoByRoom'
 DANMAKU_SERVER_CONF_URL = 'https://api.live.bilibili.com/xlive/web-room/v1/index/getDanmuInfo'
 DEFAULT_DANMAKU_SERVER_LIST = [
@@ -35,12 +36,12 @@ class BLiveClient(ws_base.WebSocketClientBase):
     """
 
     def __init__(
-        self,
-        room_id: int,
-        *,
-        uid: Optional[int] = None,
-        session: Optional[aiohttp.ClientSession] = None,
-        heartbeat_interval=30,
+            self,
+            room_id: int,
+            *,
+            uid: Optional[int] = None,
+            session: Optional[aiohttp.ClientSession] = None,
+            heartbeat_interval=30,
     ):
         super().__init__(session, heartbeat_interval)
 
@@ -120,8 +121,8 @@ class BLiveClient(ws_base.WebSocketClientBase):
 
         try:
             async with self._session.get(
-                UID_INIT_URL,
-                headers={'User-Agent': utils.USER_AGENT},
+                    UID_INIT_URL,
+                    headers={'User-Agent': HEADERS_UA},
             ) as res:
                 if res.status != 200:
                     logger.warning('room=%d _init_uid() failed, status=%d, reason=%s', self._tmp_room_id,
@@ -158,8 +159,8 @@ class BLiveClient(ws_base.WebSocketClientBase):
     async def _init_buvid(self):
         try:
             async with self._session.get(
-                BUVID_INIT_URL,
-                headers={'User-Agent': utils.USER_AGENT},
+                    BUVID_INIT_URL,
+                    headers={'User-Agent': HEADERS_UA},
             ) as res:
                 if res.status != 200:
                     logger.warning('room=%d _init_buvid() status error, status=%d, reason=%s',
@@ -171,11 +172,11 @@ class BLiveClient(ws_base.WebSocketClientBase):
     async def _init_room_id_and_owner(self):
         try:
             async with self._session.get(
-                ROOM_INIT_URL,
-                headers={'User-Agent': utils.USER_AGENT},
-                params={
-                    'room_id': self._tmp_room_id
-                },
+                    ROOM_INIT_URL,
+                    headers={'User-Agent': HEADERS_UA},
+                    params={
+                        'room_id': self._tmp_room_id
+                    },
             ) as res:
                 if res.status != 200:
                     logger.warning('room=%d _init_room_id_and_owner() failed, status=%d, reason=%s', self._tmp_room_id,
@@ -202,12 +203,12 @@ class BLiveClient(ws_base.WebSocketClientBase):
     async def _init_host_server(self):
         try:
             async with self._session.get(
-                DANMAKU_SERVER_CONF_URL,
-                headers={'User-Agent': utils.USER_AGENT},
-                params={
-                    'id': self._room_id,
-                    'type': 0
-                },
+                    DANMAKU_SERVER_CONF_URL,
+                    headers={'User-Agent': HEADERS_UA},
+                    params={
+                        'id': self._room_id,
+                        'type': 0
+                    },
             ) as res:
                 if res.status != 200:
                     logger.warning('room=%d _init_host_server() failed, status=%d, reason=%s', self._room_id,
