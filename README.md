@@ -16,3 +16,6 @@ Python获取bilibili直播弹幕的库，使用WebSocket协议，支持web端和
     ```
 
 3. 例程看[sample.py](./sample.py)和[open_live_sample.py](./open_live_sample.py)
+## 更新
+2024.09.17  ----------  修复了无法登陆获取内容问题
+
